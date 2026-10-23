@@ -1,0 +1,9 @@
+# page cache and raw API responses (re-created by scrape.py / the notebook)
+data/raw/
+data/api/
+data/errors.log
+__pycache__/
+.pytest_cache/
+.ipynb_checkpoints/
+.venv/
+.DS_Store
