@@ -6,17 +6,10 @@
 
 ## The idea in one picture
 
-```
-page-1 ──next──▶ page-2 ──next──▶ … ──▶ page-50 (no "next" → stop)
-   │ 20 books each                          │
-   ▼                                        ▼
- data/raw/page-N.html  (cache: read from disk if it exists)
-   │
-   ├─ each book's page ──▶ data/raw/books/<slug>.html ──▶ category + UPC
-   ▼
- parse (strings) ──▶ clean (types) ──▶ data/books_silver.csv / .parquet   (1,000 rows, url = key)
-                        failures ──▶ data/errors.log  (logged, never a crash)
-```
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/pipeline-dark.png">
+  <img alt="Pipeline: crawl 50 pages, cache every page, visit 1,000 book pages, clean types, save CSV and Parquet" src="assets/pipeline-light.png" width="100%">
+</picture>
 
 Three rules make the crawler both polite and restartable:
 1. **Follow the site's own "next" link** (`li.next > a` + `urljoin`). No page URL is hard-coded, so the crawl stops exactly where the site ends.
@@ -66,6 +59,13 @@ Run order matters if you also run the notebook: the notebook writes a 100-row `b
 - **CSV forgets types.** Read back with plain `pd.read_csv`, `scraped_at` is a string and `rating` is int64. Use the Parquet file, or `parse_dates=["scraped_at"]`.
 - **pandas 3 changed the default string dtype** to `str`, which breaks one test's `object` check. `requirements.txt` pins `pandas<3` (all 12 tests pass on 2.x).
 
+## What the data looks like
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="assets/data-dark.png">
+  <img alt="Top 10 categories, books by star rating and price distribution of the 1,000 scraped books" src="assets/data-light.png" width="100%">
+</picture>
+
 ## Verified, not assumed
 
 - 1,000 rows, 1,000 unique URLs, 50 pages, 50 categories (exactly the site's sidebar), 0 missing values; UPCs are 16-character hex text.
@@ -98,6 +98,6 @@ books-scraper-pipeline/
 
 ## Context
 
-Built for **ADSP 31011 Cloud-Native Data Engineering** (UChicago MS in Applied Data Science, Autumn 2026). Claude Code was used as a pair programmer under the rules in `CLAUDE.md`; every prompt, mistake and fix is in `prompts.md`. The repository is private under the course's academic-integrity policy and shared on request.
+Built for **ADSP 31011 Cloud-Native Data Engineering** (UChicago MS in Applied Data Science, Autumn 2026). Claude Code was used as a pair programmer under the rules in `CLAUDE.md`; every prompt, mistake and fix is in `prompts.md`. Published with the instructor's permission to showcase the work.
 
 **Hao Kang** · [LinkedIn](https://www.linkedin.com/in/hao-kang-6654b5331/) · [GitHub](https://github.com/haokang-uchicago)
